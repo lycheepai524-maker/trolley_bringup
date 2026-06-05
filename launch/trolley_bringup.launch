@@ -50,7 +50,7 @@
   <!-- ===== 6. WiFi Fingerprint Logger ===== -->
   <node pkg="trolley_slam" type="wifi_fingerprint_logger.py" name="wifi_logger"
         output="screen">
-    <param name="db_path"       value="$(env HOME)/fingerprintsC0706.db"/>
+    <param name="db_path"       value="$(env HOME)/trolley_fingerprintsC0706.db"/>
     <param name="scan_interval" value="10.0"/>
     <param name="min_distance"  value="0.3"/>
     <param name="wifi_interface" value="wlan0"/>
