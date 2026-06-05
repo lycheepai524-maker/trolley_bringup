@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git *)",
+      "Read(//home/ubuntu/trolley_ws/**)",
+      "Read(//home/ubuntu/**)"
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+DWAPlannerROS:
+  max_vel_x:     0.7
+  min_vel_x:     0.0
+  max_vel_trans: 0.7
+  min_vel_trans: 0.05
+
+  max_vel_theta: 2.8
+  min_vel_theta: 0.4
+  min_in_place_vel_theta: 0.4
+
+  acc_lim_x:     1.0
+  acc_lim_theta: 3.0
+
+  holonomic_robot: false
+
+  xy_goal_tolerance:  0.30
+  yaw_goal_tolerance: 0.40
+  latch_xy_goal_tolerance: true
+
+  sim_time: 3.0
+  sim_granularity: 0.05
+  angular_sim_granularity: 0.1
+  vx_samples: 8
+  vth_samples: 20
+  controller_frequency: 10.0
+
+  # =====  SCORING — heavily favors obstacle avoidance  =====
+  # path_distance_bias:  follow global plan         (was 20)
+  # goal_distance_bias:  head toward goal           (was 12)
+  # occdist_scale:       avoid obstacles            (was 0.50)
+  #
+  # New ratio (~8 : 30 : 5) means obstacle avoidance is on par with
+  # following the path, and reaching the goal matters most. DWA will
+  # readily abandon the global plan if the path crosses obstacles.
+  path_distance_bias:  8.0
+  goal_distance_bias:  30.0
+  occdist_scale:       5.0
+
+  # Reset oscillation detector quickly so DWA isn't punished for swerving
+  oscillation_reset_dist: 0.05

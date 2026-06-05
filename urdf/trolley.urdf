@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<robot name="trolley">
+
+  <!-- ===== Materials ===== -->
+  <material name="red">
+    <color rgba="0.85 0.15 0.15 1"/>
+  </material>
+  <material name="dark_grey">
+    <color rgba="0.2 0.2 0.2 1"/>
+  </material>
+  <material name="black">
+    <color rgba="0.1 0.1 0.1 1"/>
+  </material>
+  <material name="blue">
+    <color rgba="0.1 0.3 0.8 1"/>
+  </material>
+
+  <!-- ===== Base link (chassis) ===== -->
+  <!-- base_link is at the drive wheel axle, back of trolley -->
+  <link name="base_link">
+    <visual>
+      <!-- Chassis box: 70cm long x 44cm wide x 30cm tall -->
+      <!-- Box center is 0.35m forward, 0.20m above floor -->
+      <origin xyz="0.35 0 0.20" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.70 0.44 0.30"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+  </link>
+
+  <!-- ===== Drive wheels (back, 46cm apart) ===== -->
+  <link name="left_drive_wheel">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry>
+        <cylinder radius="0.05" length="0.04"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+  <joint name="left_drive_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="left_drive_wheel"/>
+    <origin xyz="0 0.23 0.05" rpy="0 0 0"/>
+  </joint>
+
+  <link name="right_drive_wheel">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry>
+        <cylinder radius="0.05" length="0.04"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+  <joint name="right_drive_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="right_drive_wheel"/>
+    <origin xyz="0 -0.23 0.05" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ===== Castor wheel (single, front center) ===== -->
+  <!-- Smaller wheel at the front center of the chassis -->
+  <link name="front_castor">
+    <visual>
+      <!-- Sphere is the simplest castor representation -->
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.03"/>
+      </geometry>
+      <material name="dark_grey"/>
+    </visual>
+  </link>
+  <joint name="front_castor_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="front_castor"/>
+    <!-- 70cm forward (front edge), centered on width, 3cm above floor -->
+    <origin xyz="0.70 0 0.03" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ===== LiDAR (visual only - actual TF from static_transform_publisher) ===== -->
+  <link name="lidar_visual">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.04" length="0.05"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+  </link>
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_visual"/>
+    <!-- LiDAR is 6.5cm forward of front (so 0.765m from base_link), 14.5cm above floor -->
+    <origin xyz="0.765 0 0.145" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ===== IMU frame ===== -->
+  <link name="imu_link"/>
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="0 0 0.05" rpy="0 0 0"/>
+  </joint>
+
+</robot>

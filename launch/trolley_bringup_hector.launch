@@ -1,0 +1,58 @@
+<launch>
+  <!-- ===== 1. Robot description ===== -->
+  <param name="robot_description"
+       textfile="$(find trolley_bringup)/urdf/trolley.urdf"/>
+  <node name="robot_state_publisher" pkg="robot_state_publisher"
+        type="robot_state_publisher"/>
+  <node pkg="tf2_ros" type="static_transform_publisher" name="base_link_to_footprint"
+        args="0 0 0 0 0 0 base_link base_footprint"/>
+
+  <!-- ===== 2. Arduino bridge ===== -->
+  <node name="arduino_serial" pkg="rosserial_python" type="serial_node.py"
+        output="screen">
+    <param name="port" value="/dev/ttyACM0"/>
+    <param name="baud" value="57600"/>
+  </node>
+
+  <!-- ===== 3. Encoder odom (publish for completeness) ===== -->
+  <node pkg="trolley_bringup" type="encoder_to_odom.py" name="encoder_to_odom"
+        output="screen">
+    <param name="ticks_per_meter" value="4848.0"/>
+    <param name="track_width"     value="0.46"/>
+    <param name="publish_rate"    value="30.0"/>
+    <param name="invert_left"     value="false"/>
+    <param name="invert_right"    value="true"/>
+  </node>
+
+  <!-- ===== 4. LiDAR ===== -->
+  <include file="$(find ydlidar_ros_driver)/launch/X3.launch"/>
+  
+  <!-- ===== 5. Static TF: base_link to laser ===== -->
+  <node pkg="tf" type="static_transform_publisher" name="base_to_laser_broadcaster"
+        args="0.12 0 0.08 0 0 0 base_link laser 100"/>
+
+  <!-- ===== 6. Hector Mapping ===== -->
+  <node pkg="hector_mapping" type="hector_mapping" name="hector_mapping"
+        output="screen">
+    <param name="map_frame"  value="map"/>
+    <param name="base_frame" value="base_link"/>
+    <param name="odom_frame" value="base_link"/>
+    <param name="scan_topic" value="scan"/>
+    <param name="map_resolution" value="0.05"/>
+    <param name="map_size" value="2048"/>
+    <param name="map_start_x" value="0.5"/>
+    <param name="map_start_y" value="0.5"/>
+    <param name="map_update_distance_thresh" value="0.4"/>
+    <param name="map_update_angle_thresh" value="0.06"/>
+    <param name="pub_map_odom_transform" value="true"/>
+  </node>
+
+  <!-- ===== 7. WiFi Fingerprint Logger ===== -->
+  <node pkg="trolley_slam" type="wifi_fingerprint_logger.py" name="wifi_logger"
+        output="screen">
+    <param name="db_path"       value="$(env HOME)/trolley_fingerprints.db"/>
+    <param name="scan_interval" value="3.0"/>
+    <param name="min_distance"  value="0.3"/>
+    <param name="wifi_interface" value="wlan0"/>
+  </node>
+</launch>

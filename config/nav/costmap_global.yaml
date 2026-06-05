@@ -1,0 +1,19 @@
+# Global costmap config — rolling window in odom frame (no static map).
+# Explicitly configure the plugin chain so we KNOW the laser feeds in.
+global_costmap:
+  global_frame: odom
+  robot_base_frame: base_link
+  update_frequency: 5.0
+  publish_frequency: 2.0
+  static_map: false
+  rolling_window: true
+  width: 10.0
+  height: 10.0
+  resolution: 0.05
+  transform_tolerance: 0.5
+
+  # Explicit plugin list: obstacle_layer reads /scan, inflation_layer creates
+  # the cost gradient. NO static_layer because there's no map.
+  plugins:
+    - {name: obstacle_layer,  type: "costmap_2d::ObstacleLayer"}
+    - {name: inflation_layer, type: "costmap_2d::InflationLayer"}

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>trolley_bringup</name>
+  <version>0.0.1</version>
+  <description>Trolley full-system bringup: rosserial + IMU + EKF + encoder odom + LiDAR + SLAM + WiFi logging</description>
+  <maintainer email="ubuntu@todo.todo">ubuntu</maintainer>
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>rospy</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>nav_msgs</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>tf</build_depend>
+
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>nav_msgs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>tf</exec_depend>
+  <exec_depend>rosserial_python</exec_depend>
+  <exec_depend>imu_node</exec_depend>
+  <exec_depend>imu_filter_madgwick</exec_depend>
+  <exec_depend>robot_localization</exec_depend>
+  <exec_depend>ydlidar_ros_driver</exec_depend>
+  <exec_depend>slam_toolbox</exec_depend>
+  <exec_depend>trolley_slam</exec_depend>
+</package>

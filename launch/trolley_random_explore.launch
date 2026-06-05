@@ -1,0 +1,22 @@
+<launch>
+  <!-- Random exploration: builds on the obstacle-avoidance setup and adds
+       a wanderer node that picks safe directions and feeds goals to move_base.
+       
+       Stop: Ctrl-C or rosnode kill /random_explorer
+  -->
+
+  <!-- Bring up the obstacle-avoidance stack (LiDAR, encoders, move_base, etc.) -->
+  <include file="$(find trolley_bringup)/launch/trolley_obstacle_avoidance.launch"/>
+
+  <!-- The wanderer -->
+  <node pkg="trolley_bringup" type="random_explorer.py" name="random_explorer"
+        output="screen">
+    <param name="min_goal_dist"     value="1.2"/>
+    <param name="max_goal_dist"     value="2.5"/>
+    <param name="safety_clearance"  value="0.9"/>
+    <param name="goal_timeout"      value="25.0"/>
+    <param name="rest_time"         value="0.5"/>
+    <!-- only consider directions within +/- 60 deg of robot's forward axis -->
+    <param name="front_arc_deg"     value="120.0"/>
+  </node>
+</launch>

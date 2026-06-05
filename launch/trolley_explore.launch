@@ -1,0 +1,39 @@
+<launch>
+  <!--
+       Trolley Autonomous Exploration Launch
+       =====================================
+       Includes the base bringup, then adds:
+         - move_base (path planning + obstacle avoidance)
+         - explore_lite (frontier-based exploration)
+
+       Use this when you want the trolley to map a space autonomously.
+       For manual driving, use trolley_bringup.launch instead.
+  -->
+
+  <!-- Include the existing bringup (LiDAR, SLAM, IMU, EKF, encoder, etc.) -->
+  <include file="$(find trolley_bringup)/launch/trolley_bringup.launch"/>
+
+  <!-- move_base -->
+  <node pkg="move_base" type="move_base" name="move_base" output="screen"
+        respawn="false">
+    <rosparam file="$(find trolley_bringup)/config/nav/costmap_common.yaml"
+              command="load" ns="global_costmap"/>
+    <rosparam file="$(find trolley_bringup)/config/nav/costmap_common.yaml"
+              command="load" ns="local_costmap"/>
+    <rosparam file="$(find trolley_bringup)/config/nav/costmap_global.yaml"
+              command="load"/>
+    <rosparam file="$(find trolley_bringup)/config/nav/costmap_local.yaml"
+              command="load"/>
+    <rosparam file="$(find trolley_bringup)/config/nav/dwa_planner.yaml"
+              command="load"/>
+    <rosparam file="$(find trolley_bringup)/config/nav/move_base.yaml"
+              command="load"/>
+  </node>
+
+<!-- explore_lite (frontier-based exploration) 
+  <node pkg="explore_lite" type="explore" name="explore" output="screen">
+    <rosparam file="$(find trolley_bringup)/config/nav/explore.yaml"
+            command="load"/>
+  </node>
+-->
+</launch>

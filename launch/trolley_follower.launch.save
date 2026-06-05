@@ -1,0 +1,80 @@
+<launch>
+  <!-- ===== 1. Robot description ===== -->
+  <param name="robot_description"
+       textfile="$(find trolley_bringup)/urdf/trolley.urdf"/>
+  <node name="robot_state_publisher" pkg="robot_state_publisher"
+        type="robot_state_publisher"/>
+
+  <!-- ===== 2. Arduino bridge ===== -->
+  <node name="arduino_serial" pkg="rosserial_python" type="serial_node.py"
+        output="screen">
+    <param name="port" value="/dev/ttyACM0"/>
+    <param name="baud" value="57600"/>
+  </node>
+
+  <!-- ===== 3. LiDAR ===== -->
+  <include file="$(find ydlidar_ros_driver)/launch/X3.launch"/>
+  <node pkg="tf" type="static_transform_publisher" name="base_to_laser_broadcaster"
+        args="0.765 0 0.145 0 0 0 base_link laser 100"/>
+
+  <!-- ===== 4. cmd_vel booster (overcomes motor deadband) ===== -->
+  <node pkg="trolley_bringup" type="cmd_vel_boost.py" name="cmd_vel_boost"
+        output="screen">
+    <param name="ang_threshold"   value="0.05"/>
+    <param name="ang_gain"        value="1.0"/>
+    <param name="ang_min_output"  value="2.5"/>
+    <param name="lin_gain"        value="1.0"/>
+    <param name="lin_min_output"  value="0.3"/>
+  </node>
+
+  <!-- ===== 5. LiDAR follower ===== -->
+ <node pkg="trolley_bringup" type="lidar_follower.py" name="lidar_follower"
+      output="screen">
+  
+  <!-- Critical: LiDAR mounting offset (calibrated for your hardware) -->
+  <param name="lidar_yaw_offset" value="1.7284"/>
+  
+  <!-- Training -->
+  <param name="training_duration"      value="3.0"/>
+  <param name="training_search_angle"  value="0.524"/>  <!-- ±30°, narrow during training -->
+  <param name="training_min_dist"      value="0.30"/>
+  <param name="training_max_dist"      value="1.0"/>
+  <param name="min_training_samples"   value="8"/>
+  
+  <!-- Following behavior -->
+  <param name="follow_distance"   value="0.5"/>
+  <param name="distance_deadband" value="0.05"/>
+  <param name="bearing_deadband"  value="0.087"/>
+  <param name="slow_zone"         value="0.30"/>
+  <param name="safety_distance"   value="0.30"/>
+  
+  <!-- Cluster filtering -->
+  <param name="min_cluster_size"   value="3"/>
+  <param name="min_cluster_width"  value="0.08"/>
+  <param name="max_cluster_width"  value="0.50"/>
+  <param name="cluster_threshold"  value="0.15"/>
+  
+  <!-- Tracking gates (FOLLOWING mode) -->
+  <param name="max_distance_change" value="0.30"/>
+  <param name="max_bearing_change"  value="0.52"/>  <!-- 30° -->
+  <param name="max_width_diff"      value="0.15"/>
+  
+  <!-- Recovery gates (SEARCHING mode - more permissive) -->
+  <param name="search_distance_gate" value="0.60"/>
+  <param name="search_bearing_gate"  value="0.87"/>  <!-- 50° -->
+  <param name="occlusion_tolerance"  value="1.0"/>
+  <param name="lost_timeout"         value="2.5"/>
+  
+  <!-- Speed -->
+  <param name="max_lin_vel"  value="0.25"/>
+  <param name="max_ang_vel"  value="0.8"/>
+  <param name="lin_gain"     value="0.8"/>
+  <param name="ang_gain"     value="1.5"/>
+  <param name="smoothing"    value="0.7"/>
+  
+  <!-- Detection range -->
+  <param name="search_angle"  value="1.22"/>  <!-- ±70° during following -->
+  <param name="min_range"     value="0.20"/>
+  <param name="max_range"     value="3.0"/>
+ </node>
+</launch>

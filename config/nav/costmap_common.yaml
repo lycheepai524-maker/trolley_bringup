@@ -1,0 +1,12 @@
+robot_radius: 0.50
+ 
+# Inflation: how far obstacles 'puff out'. Smaller -> robot can squeeze closer.
+inflation_radius: 0.30
+cost_scaling_factor: 5.0
+ 
+obstacle_range: 3.0
+raytrace_range: 3.5
+ 
+observation_sources: laser_scan_sensor
+laser_scan_sensor: {sensor_frame: laser, data_type: LaserScan,
+                    topic: scan, marking: true, clearing: true}
