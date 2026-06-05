@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# ROS
+*.bag
+*.log
+build/
+devel/
+
+# SQLite
+*.db
+
+# Editors
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
