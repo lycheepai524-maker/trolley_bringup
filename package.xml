@@ -3,7 +3,7 @@
   <name>trolley_bringup</name>
   <version>0.0.1</version>
   <description>Trolley full-system bringup: rosserial + IMU + EKF + encoder odom + LiDAR + SLAM + WiFi logging</description>
-  <maintainer email="ubuntu@todo.todo">ubuntu</maintainer>
+  <maintainer email="lycheepai524@gmail.com">lycheepai524-maker</maintainer>
   <license>TODO</license>
 
   <buildtool_depend>catkin</buildtool_depend>
